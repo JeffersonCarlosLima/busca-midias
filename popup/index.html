@@ -23,7 +23,7 @@
               <div class="year">{{ it.tmdb ? it.tmdb.tmdb_year : (it.parsed_year || '') }}</div>
               <div class="raw">{{ it.raw_name }}</div>
               <div class="actions">
-                <button @click="copyMagnet(it)">Copiar Magnet</button>
+                <button @click="copyMagnet(it, idx)">Copiar Magnet</button>
                 <span v-if="copiedIndex===idx" class="copied">Copiado!</span>
               </div>
             </div>

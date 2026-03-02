@@ -18,16 +18,18 @@ createApp({
       try {
         await navigator.clipboard.writeText(it.magnet);
         copiedIndex.value = idx;
-        setTimeout(() => (copiedIndex.value = null), 1500);
+        setTimeout(() => (copiedIndex.value = null), 2000);
       } catch (e) {
         console.error('Clipboard error', e);
+        alert('Erro ao copiar para clipboard');
       }
     }
 
     // Ouve notificações do background (quando novos magnets são processados)
-    chrome.runtime.onMessage.addListener((message) => {
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       if (message && message.type === 'processed_magnets') {
         items.value = message.items || [];
+        loading.value = false;
       }
     });
 

@@ -1,6 +1,6 @@
 // background.js — service worker (Manifest V3)
 // Insira sua chave TMDB abaixo:
-const TMDB_API_KEY = 'YOUR_TMDB_API_KEY_HERE';
+const TMDB_API_KEY = 'SUA_CHAVE_TMDB_AQUI'; // Substitua pela sua chave de API do TMDB
 
 let storedItems = [];
 
@@ -98,23 +98,38 @@ async function processItems(items) {
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (!message || !message.type) return;
+  if (!message || !message.type) return false;
+  
   if (message.type === 'found_magnets') {
     // recebe do content script, processa e armazena
     (async () => {
       try {
         const processed = await processItems(message.items || []);
         storedItems = processed;
-        // notifica popup (se aberto)
-        chrome.runtime.sendMessage({ type: 'processed_magnets', items: storedItems });
+        
+        // Notifica o popup se estiver aberto
+        chrome.runtime.sendMessage(
+          { type: 'processed_magnets', items: storedItems },
+          () => {
+            // ignora erro se popup não está aberto
+            if (chrome.runtime.lastError) {
+              console.log('Popup não está aberto, mas magnets foram processados');
+            }
+          }
+        );
+        
+        sendResponse({ success: true, processed: processed.length });
       } catch (e) {
         console.error('Erro processando magnets', e);
+        sendResponse({ success: false, error: e.message });
       }
     })();
+    return true; // indica resposta assíncrona
   } else if (message.type === 'get_magnets') {
     sendResponse({ items: storedItems });
-    return true; // indica resposta assíncrona possível
+    return false;
   }
+  return false;
 });
 
 chrome.runtime.onInstalled.addListener(() => {
