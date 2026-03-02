@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Busca Torrent TMDB",
+  "version": "1.0.0",
+  "description": "Detecta links magnet na página, limpa nomes, busca metadados no TMDB e exibe no popup.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "clipboardWrite"
+  ],
+  "host_permissions": [
+    "https://api.themoviedb.org/*",
+    "https://image.tmdb.org/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup/index.html",
+    "default_title": "Busca Torrent TMDB"
+  }
+}

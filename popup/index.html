@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Busca Torrent TMDB</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <h1>Busca Torrent TMDB</h1>
+      </header>
+      <main>
+        <div v-if="loading" class="info">Procurando...</div>
+        <div v-if="!loading && items.length === 0" class="info">Nenhum magnet encontrado nesta aba.</div>
+        <ul class="results">
+          <li v-for="(it, idx) in items" :key="idx">
+            <img :src="it.tmdb && it.tmdb.poster ? it.tmdb.poster : 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'180\'><rect width=\'100%\' height=\'100%\' fill=\'#ddd\'/></svg>'" alt="poster" />
+            <div class="meta">
+              <div class="title">{{ it.tmdb ? it.tmdb.tmdb_title : (it.parsed_title || it.raw_name || '—') }}</div>
+              <div class="year">{{ it.tmdb ? it.tmdb.tmdb_year : (it.parsed_year || '') }}</div>
+              <div class="raw">{{ it.raw_name }}</div>
+              <div class="actions">
+                <button @click="copyMagnet(it)">Copiar Magnet</button>
+                <span v-if="copiedIndex===idx" class="copied">Copiado!</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </main>
+      <footer>
+        <small>TMDB integrado — insira sua chave em background.js</small>
+      </footer>
+    </div>
+    <script src="app.js"></script>
+  </body>
+ </html>
