@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Busca Torrent TMDB",
+  "name": "Busca Midias TMDB",
   "version": "1.0.0",
   "description": "Detecta links magnet na página, limpa nomes, busca metadados no TMDB e exibe no popup.",
   "permissions": [
